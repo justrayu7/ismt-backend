@@ -7,6 +7,9 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 app = FastAPI()
 
+@app.get("/")
+def root():
+    return {"message": "Hello from FastAPI"}
 # Allow Next.js to connect (CORS)
 app.add_middleware(
     CORSMiddleware,
