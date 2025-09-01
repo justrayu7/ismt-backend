@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -15,11 +16,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Azure MySQL database setup
-DATABASE_URL = "mysql+pymysql://trinav:Password123@trinav.mysql.database.azure.com:3306/contacts_db"
+# Azure MySQL database setup from environment variables
+MYSQL_HOST = os.getenv("AZURE_MYSQL_HOST", "trinav.mysql.database.azure.com")
+MYSQL_USER = os.getenv("AZURE_MYSQL_USER", "trinav")
+MYSQL_PASSWORD = os.getenv("AZURE_MYSQL_PASSWORD", "Password123")
+MYSQL_DB = os.getenv("AZURE_MYSQL_NAME", "contacts_db")
+MYSQL_PORT = os.getenv("AZURE_MYSQL_PORT", "3306")
+
+DATABASE_URL = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DB}"
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"ssl": {"ssl_ca": "DigiCertGlobalRootCA.crt.pem"}}
+    connect_args={"ssl": {"ca": "DigiCertGlobalRootCA.crt.pem"}}
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
