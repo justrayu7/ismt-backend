@@ -10,10 +10,11 @@ app = FastAPI()
 @app.get("/")
 def root():
     return {"message": "Hello from FastAPI"}
+
 # Allow Next.js to connect (CORS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://ismt-frontend.vercel.app"],  # Update with Vercel URL later
+    allow_origins=["http://localhost:3000", "https://ismt-frontend.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
